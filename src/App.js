@@ -9,7 +9,7 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [input, setInput] = useState("");
 
-
+    
   useEffect(() => {
     getTodos();
   }, [])
@@ -82,7 +82,7 @@ function App() {
           console.log(error);
         })
     }
-    deleteTodo();
+    deleteTodo(); 
   }
 
   return (
