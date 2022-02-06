@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import axios from 'axios';
+import Input from './components/input';
+import Todo from './components/todo';
 
 function App() {
 
@@ -9,7 +11,7 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [input, setInput] = useState("");
 
-    
+
   useEffect(() => {
     getTodos();
   }, [])
@@ -68,51 +70,32 @@ function App() {
     updateTodo();
   }
 
-  function deleteTodo(id){
+  function deleteTodo(id) {
     const deleteTodo = async () => {
       await axios
         .delete(baseURL + "/todo/" + id, {})
         .then((response) => {
           console.log(response);
           setTodos(
-            todos.filter((todo)=> todo.id !== id)
+            todos.filter((todo) => todo.id !== id)
           )
         })
-        .catch((error) =>{
+        .catch((error) => {
           console.log(error);
         })
     }
-    deleteTodo(); 
+    deleteTodo();
   }
 
   return (
     <div className="App">
       <h1>To Do List</h1>
-      <form onSubmit={insertTodo}>
-        <label>
-          Todo&nbsp;
-          <input type="text" required={true} value={input} onChange={changeText} />
-        </label>
-        <input type="submit" value="Create" />
-      </form>
-
+      <Input handleChange={changeText} input={input} handlesubmit={insertTodo} />
       {
         todos
           ? todos.map((todo) => {
             return (
-              <div className='todo' key={todo.id}>
-                <h3>
-                  <label
-                    className={todo.completed ? "completed" : null}
-                    onClick={() => updateTodo(todo.id)}>
-                    {todo.todoName}
-                  </label>
-                  <label
-                  onClick={()=>deleteTodo(todo.id)}>
-                    &nbsp;&nbsp;&nbsp;❌
-                  </label>
-                </h3>
-              </div>
+              <Todo key={todo.id} todo={todo} handleClick={()=>updateTodo(todo.id)} handleDelete={() => deleteTodo(todo.id)}/>
             )
           }) : null
       }
